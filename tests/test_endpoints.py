@@ -66,3 +66,7 @@ def test_post_blacklist_requires_auth(client):
 
     assert response.status_code == 401
     assert "Token de autorizacion requerido" in response.get_json()["message"]
+
+def test_always_fail(client):
+    # Prueba negativa: se adiciona caso de prueba para hacer fallar el paso de pruebas.
+    assert True == False
