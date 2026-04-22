@@ -1,0 +1,36 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.13
+    commands:
+      - echo "Instalando dependencias..."
+      - pip install -r requirements.txt
+
+  pre_build:
+    commands:
+      - echo "Verificando entorno..."
+      - python --version
+      - pip --version
+
+  build:
+    commands:
+      - echo "Ejecutando pruebas unitarias..."
+      - python -m pytest tests/ -v --tb=short
+      - echo "Pruebas completadas. Creando directorio dist para artefacto desplegable..."
+      - mkdir -p dist
+      - cp -R .ebextensions/ dist/
+      - cp -R app/ dist/
+      - cp application.py dist/
+      - cp .ebignore dist/
+      - cp Procfile dist/
+      - cp requirements.txt dist/
+      - echo "Directorio dist creado."
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'dist'
+  discard-paths: no
+  packaging: zip
